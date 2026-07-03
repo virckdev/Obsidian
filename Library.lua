@@ -5086,7 +5086,7 @@ do
                 Str = Str:sub(1, #Str - 2)
             else
                 ValueImage = GetValueImage(Dropdown.Value)
-                
+
                 local function GetFormattedPlayer(Value)
                     if typeof(Value) == "Instance" and Value:IsA("Player") then
                         if Value.DisplayName and Value.DisplayName ~= Value.Name then
@@ -5378,7 +5378,6 @@ do
 
             local Count = 0
             for _, Value in Values do
-                for _, Value in Values do
                 local FormattedValue = tostring(Value)
                 if Dropdown.SpecialType == "Player" and typeof(Value) == "Instance" and Value:IsA("Player") then
                     if Value.DisplayName and Value.DisplayName ~= Value.Name then
