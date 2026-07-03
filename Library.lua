@@ -5086,10 +5086,23 @@ do
                 Str = Str:sub(1, #Str - 2)
             else
                 ValueImage = GetValueImage(Dropdown.Value)
-                Str = Dropdown.Value and tostring(Dropdown.Value) or ""
+                
+                local function GetFormattedPlayer(Value)
+                    if typeof(Value) == "Instance" and Value:IsA("Player") then
+                        if Value.DisplayName and Value.DisplayName ~= Value.Name then
+                            return string.format("%s (@%s)", Value.DisplayName, Value.Name)
+                        end
+                        return Value.Name
+                    end
+                    return tostring(Value)
+                end
 
-                if Str ~= "" and Info.FormatDisplayValue then
-                    Str = tostring(Info.FormatDisplayValue(Str))
+                if Dropdown.SpecialType == "Player" then
+                    Str = Dropdown.Value and GetFormattedPlayer(Dropdown.Value) or ""
+                elseif Info.FormatDisplayValue then
+                    Str = Dropdown.Value and tostring(Info.FormatDisplayValue(Dropdown.Value)) or ""
+                else
+                    Str = Dropdown.Value and tostring(Dropdown.Value) or ""
                 end
             end
 
@@ -5365,8 +5378,17 @@ do
 
             local Count = 0
             for _, Value in Values do
-                local FormattedValue = tostring(Info.FormatListValue and Info.FormatListValue(Value) or Value)
-
+                for _, Value in Values do
+                local FormattedValue = tostring(Value)
+                if Dropdown.SpecialType == "Player" and typeof(Value) == "Instance" and Value:IsA("Player") then
+                    if Value.DisplayName and Value.DisplayName ~= Value.Name then
+                        FormattedValue = string.format("%s (@%s)", Value.DisplayName, Value.Name)
+                    else
+                        FormattedValue = Value.Name
+                    end
+                elseif Info.FormatListValue then
+                    FormattedValue = tostring(Info.FormatListValue(Value))
+                end
 
                 Count += 1
 
