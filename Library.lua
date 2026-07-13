@@ -5403,6 +5403,16 @@ do
                     Parent = Info.Multi and ButtonHolder or MenuTable.Menu,
                 })
 
+                if Library.CornerElements then
+                    table.insert(
+                        Library.Corners,
+                        New("UICorner", {
+                            CornerRadius = UDim.new(0, Library.CornerRadius / 2),
+                            Parent = Container,
+                        })
+                    )
+                end
+
                 local Image = ValueImage and New("ImageLabel", {
                     BackgroundTransparency = 1,
                     Image = ValueImage.Url,
