@@ -5434,6 +5434,15 @@ do
                     TextXAlignment = Enum.TextXAlignment.Left,
                     Parent = Container,
                 })
+                if Library.CornerElements then
+                    table.insert(
+                        Library.Corners,
+                        New("UICorner", {
+                            CornerRadius = UDim.new(0, Library.CornerRadius / 2),
+                            Parent = Button,
+                        })
+                    )
+                end
                 New("UIPadding", {
                     PaddingLeft = UDim.new(0, 7),
                     PaddingRight = UDim.new(0, 7),
