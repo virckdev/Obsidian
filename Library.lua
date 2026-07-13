@@ -227,7 +227,7 @@ local Library = {
     DPIScale = 1,
     CornerRadius = 4,
     CornerElements = true,
-    CornerRadiusDropdown = false, -- Temporary
+    CornerRadiusDropdown = true, -- Temporary
 
     IsLightTheme = false,
     Scheme = {
@@ -5403,16 +5403,6 @@ do
                     Parent = Info.Multi and ButtonHolder or MenuTable.Menu,
                 })
 
-                if Library.CornerElements then
-                    table.insert(
-                        Library.Corners,
-                        New("UICorner", {
-                            CornerRadius = UDim.new(0, Library.CornerRadius / 2),
-                            Parent = Container,
-                        })
-                    )
-                end
-
                 local Image = ValueImage and New("ImageLabel", {
                     BackgroundTransparency = 1,
                     Image = ValueImage.Url,
@@ -5434,15 +5424,6 @@ do
                     TextXAlignment = Enum.TextXAlignment.Left,
                     Parent = Container,
                 })
-                if Library.CornerElements then
-                    table.insert(
-                        Library.Corners,
-                        New("UICorner", {
-                            CornerRadius = UDim.new(0, Library.CornerRadius / 2),
-                            Parent = Button,
-                        })
-                    )
-                end
                 New("UIPadding", {
                     PaddingLeft = UDim.new(0, 7),
                     PaddingRight = UDim.new(0, 7),
