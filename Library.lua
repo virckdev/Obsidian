@@ -5035,7 +5035,7 @@ do
                     SearchBox.Visible = Active
                 end
             end,
-            true
+            not Library.CornerElements
         )
         Dropdown.Menu = MenuTable
 
