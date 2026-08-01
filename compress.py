@@ -365,7 +365,7 @@ def _long_string_to_short(value):
 def _collect_scopes(tokens):
     scopes = []
     declared = set()
-    used = set()
+    global_reads = set()
     i = 0
     n = len(tokens)
 
@@ -381,7 +381,7 @@ def _collect_scopes(tokens):
             scopes[-1][name] = True
         declared.add(name)
 
-    def is_declared(name):
+    def is_local(name):
         for s in reversed(scopes):
             if name in s:
                 return True
@@ -392,35 +392,30 @@ def _collect_scopes(tokens):
     while i < n:
         t = tokens[i]
 
-        if t.type == T_IDENT and t.value == "function" and i + 1 < n and tokens[i + 1].type == T_IDENT:
+        if t.type == T_OP and t.value == ":":
             i += 1
-            declare(tokens[i].value)
-            push_scope()
-            i += 1
-            if i < n and tokens[i].type == T_OP and tokens[i].value == "(":
+            while i < n:
+                if tokens[i].type == T_OP and tokens[i].value in ("=", ",", ")", "}"):
+                    break
                 i += 1
-                while i < n and not (tokens[i].type == T_OP and tokens[i].value == ")"):
-                    if tokens[i].type == T_IDENT:
-                        declare(tokens[i].value)
+            continue
+
+        if t.type == T_IDENT and t.value == "local" and i + 1 < n and tokens[i + 1].type == T_IDENT and tokens[i + 1].value == "function":
+            i += 2
+            if i < n and tokens[i].type == T_IDENT:
+                declare(tokens[i].value)
+                push_scope()
+                i += 1
+                if i < n and tokens[i].type == T_OP and tokens[i].value == "(":
                     i += 1
+                    while i < n and not (tokens[i].type == T_OP and tokens[i].value == ")"):
+                        if tokens[i].type == T_IDENT:
+                            declare(tokens[i].value)
+                        i += 1
             continue
 
         if t.type == T_IDENT and t.value == "local":
             i += 1
-            if i < n and tokens[i].type == T_IDENT and tokens[i].value == "function":
-                i += 1
-                if i < n and tokens[i].type == T_IDENT:
-                    declare(tokens[i].value)
-                    push_scope()
-                    i += 1
-                    if i < n and tokens[i].type == T_OP and tokens[i].value == "(":
-                        i += 1
-                        while i < n and not (tokens[i].type == T_OP and tokens[i].value == ")"):
-                            if tokens[i].type == T_IDENT:
-                                declare(tokens[i].value)
-                            i += 1
-                continue
-
             while i < n and tokens[i].type == T_IDENT:
                 declare(tokens[i].value)
                 i += 1
@@ -428,6 +423,23 @@ def _collect_scopes(tokens):
                     i += 1
                 else:
                     break
+            continue
+
+        if t.type == T_IDENT and t.value == "function":
+            i += 1
+            if i < n and tokens[i].type == T_IDENT:
+                i += 1
+                if i < n and tokens[i].type == T_OP and tokens[i].value in (".", ":"):
+                    i += 1
+                    if i < n and tokens[i].type == T_IDENT:
+                        i += 1
+                push_scope()
+                if i < n and tokens[i].type == T_OP and tokens[i].value == "(":
+                    i += 1
+                    while i < n and not (tokens[i].type == T_OP and tokens[i].value == ")"):
+                        if tokens[i].type == T_IDENT:
+                            declare(tokens[i].value)
+                        i += 1
             continue
 
         if t.type == T_IDENT and t.value == "for":
@@ -442,13 +454,13 @@ def _collect_scopes(tokens):
                     break
             continue
 
-        if t.type == T_IDENT and t.value in ("end", "until"):
-            pop_scope()
+        if t.type == T_IDENT and t.value == "do":
+            push_scope()
             i += 1
             continue
 
-        if t.type == T_IDENT and t.value == "do":
-            push_scope()
+        if t.type == T_IDENT and t.value in ("end", "until"):
+            pop_scope()
             i += 1
             continue
 
@@ -463,48 +475,50 @@ def _collect_scopes(tokens):
             continue
 
         if t.type == T_IDENT:
-            if t.value not in KEYWORDS and not t.value.startswith("__") and t.value != "_":
-                if is_declared(t.value):
-                    used.add(t.value)
+            val = t.value
+            if val not in KEYWORDS and not val.startswith("__") and val != "_":
+                if not is_local(val):
+                    global_reads.add(val)
             i += 1
             continue
 
         i += 1
 
     pop_scope()
-    return declared, used
+    renameable = declared - global_reads
+    return renameable, declared | global_reads
 
 
-def _build_rename_map(declared, used):
+def _build_rename_map(renameable, all_used):
+    """Map local identifiers to shortest possible names."""
     reserved = set(KEYWORDS)
-    reserved.update({"_G", "_ENV", "_VERSION", "_", "self", "arg"})
+    reserved.update({"_G", "_ENV", "_VERSION", "_", "self", "arg", "nil", "true", "false"})
 
     candidates = []
     chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-
     for c in chars:
         if c not in reserved:
             candidates.append(c)
-
     for c1 in chars:
         for c2 in chars + "0123456789":
-            if c1 + c2 not in reserved:
-                candidates.append(c1 + c2)
-
+            s = c1 + c2
+            if s not in reserved:
+                candidates.append(s)
     for c1 in chars:
         for c2 in chars + "0123456789":
             for c3 in chars + "0123456789":
-                if c1 + c2 + c3 not in reserved:
-                    candidates.append(c1 + c2 + c3)
+                s = c1 + c2 + c3
+                if s not in reserved:
+                    candidates.append(s)
 
     rename = {}
     idx = 0
-    for name in sorted(declared):
+    for name in sorted(renameable):
         if name in reserved or name.startswith("__"):
             continue
         if len(name) == 1:
             continue
-        while idx < len(candidates) and candidates[idx] in used:
+        while idx < len(candidates) and candidates[idx] in all_used:
             idx += 1
         if idx < len(candidates):
             rename[name] = candidates[idx]
