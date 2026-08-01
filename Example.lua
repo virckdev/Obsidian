@@ -247,6 +247,15 @@ Options.MyTextbox:OnChanged(function()
 	print("Text updated. New text:", Options.MyTextbox.Value)
 end)
 
+LeftGroupBox:AddButton("KeyPicker Button", function()
+    print("clicked")
+end):AddKeyPicker("MyKeyPickerButton", {
+    Default = "E",
+    Mode = "Press", -- or "Hold", "Always"
+    Text = "My Keybind",
+})
+
+
 local DropdownGroupBox = Tabs.Main:AddRightGroupbox("Dropdowns")
 
 DropdownGroupBox:AddDropdown("MyDropdown", {

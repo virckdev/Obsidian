@@ -28,7 +28,7 @@ local Toggles = {}
 local Options = {}
 local Tooltips = {}
 
-local BaseURL = "https://raw.githubusercontent.com/uhfork/Obsidian/refs/heads/main/"
+local BaseURL = "https://raw.githubusercontent.com/white558/Obsidian/refs/heads/main/"
 local CustomImageManager = {}
 local CustomImageManagerAssets = {
     TransparencyTexture = {
@@ -1067,9 +1067,24 @@ type IconModule = {
 }
 
 local FetchIcons, Icons = pcall(function()
-    return (loadstring(
-        game:HttpGet("https://gitlab.com/upio/lucide-roblox-direct/-/raw/main/source.lua")
-    ) :: () -> IconModule)()
+    local CachePath = "Obsidian/lucide-icons.lua"
+    local Content
+    if isfile and readfile and isfile(CachePath) then
+        Content = readfile(CachePath)
+    end
+    
+    if not Content or Content == "" or not Content:find("GetAsset") then
+        Content = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
+        if writefile and makefolder and Content and Content ~= "" then
+            pcall(function()
+                if not isfolder("Obsidian") then
+                    makefolder("Obsidian")
+                end
+                writefile(CachePath, Content)
+            end)
+        end
+    end
+    return (loadstring(Content) :: () -> IconModule)()
 end)
 
 function Library:GetIcon(IconName: string)
@@ -2260,11 +2275,15 @@ do
         }
 
         if KeyPicker.Mode == "Press" then
-            assert(ParentObj.Type == "Label", "KeyPicker with the mode 'Press' can be only applied on Labels.")
+            assert(ParentObj.Type == "Label" or ParentObj.Type == "Button" or ParentObj.Type == "SubButton", "KeyPicker with the mode 'Press' can be only applied on Labels, Buttons, or SubButtons.")
 
             KeyPicker.SyncToggleState = false
             Info.Modes = { "Press" }
             Info.Mode = "Press"
+        end
+
+        if ParentObj.Type == "Button" or ParentObj.Type == "SubButton" then
+            KeyPicker.SyncToggleState = false
         end
 
         if KeyPicker.SyncToggleState then
@@ -3674,6 +3693,7 @@ do
 
             Tween = nil,
             Type = "Button",
+            Addons = {},
         }
 
         local Holder = New("Frame", {
@@ -3704,6 +3724,20 @@ do
             local Stroke = New("UIStroke", {
                 Color = "OutlineColor",
                 Transparency = Button.Disabled and 0.5 or 0,
+                Parent = Base,
+            })
+
+            New("UIListLayout", {
+                FillDirection = Enum.FillDirection.Horizontal,
+                HorizontalAlignment = Enum.HorizontalAlignment.Right,
+                VerticalAlignment = Enum.VerticalAlignment.Center,
+                Padding = UDim.new(0, 6),
+                Parent = Base,
+            })
+
+            New("UIPadding", {
+                PaddingRight = UDim.new(0, 6),
+                PaddingLeft = UDim.new(0, 6),
                 Parent = Base,
             })
 
@@ -3794,6 +3828,7 @@ do
 
                 Tween = nil,
                 Type = "SubButton",
+                Addons = {},
             }
 
             Button.SubButton = SubButton
@@ -3858,6 +3893,9 @@ do
                 table.insert(Buttons, SubButton)
             end
 
+            SubButton.TextLabel = SubButton.Base
+            setmetatable(SubButton, BaseAddons)
+
             return SubButton
         end
 
@@ -3920,6 +3958,9 @@ do
         else
             table.insert(Buttons, Button)
         end
+
+        Button.TextLabel = Button.Base
+        setmetatable(Button, BaseAddons)
 
         return Button
     end
@@ -4784,7 +4825,59 @@ do
         end
 
         Bar.InputBegan:Connect(function(Input: InputObject)
-            if not IsClickInput(Input) or Slider.Disabled then
+            if Slider.Disabled then
+                return
+            end
+
+            if IsClickInput(Input, true) and Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                local Box = New("TextBox", {
+                    BackgroundColor3 = "MainColor",
+                    ClearTextOnFocus = false,
+                    Size = UDim2.fromScale(1, 1),
+                    Text = tostring(Slider.Value),
+                    TextSize = 14,
+                    TextXAlignment = Enum.TextXAlignment.Center,
+                    ZIndex = 5,
+                    Parent = Bar,
+                })
+
+                local Stroke = New("UIStroke", {
+                    Color = "OutlineColor",
+                    Parent = Box,
+                })
+
+                local Corner
+                if Library.CornerElements then
+                    Corner = New("UICorner", {
+                        CornerRadius = UDim.new(0, Library.CornerRadius / 2),
+                        Parent = Box,
+                    })
+                    table.insert(Library.Corners, Corner)
+                end
+
+                Box:CaptureFocus()
+
+                Box.FocusLost:Connect(function(EnterPressed)
+                    if EnterPressed then
+                        local Val = tonumber(Box.Text)
+                        if Val then
+                            Slider:SetValue(Val)
+                        end
+                    end
+                    if Corner then
+                        local idx = table.find(Library.Corners, Corner)
+                        if idx then
+                            table.remove(Library.Corners, idx)
+                        end
+                    end
+                    Library.Registry[Box] = nil
+                    Library.Registry[Stroke] = nil
+                    Box:Destroy()
+                end)
+                return
+            end
+
+            if not IsClickInput(Input) then
                 return
             end
 
