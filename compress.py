@@ -17,7 +17,7 @@ IMG_EXTENSIONS = {".png"}
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 COMPRESSED_DIR = os.path.join(ROOT_DIR, "Compressed")
 
-LUA_DECOMPRESSOR = '''local function d(c)local t={}local i=5 local n=#c while i<=n do local b=string.byte local o=b(c,i)i=i+1 local l=math.floor(o/16)if l>=15 then repeat local x=b(c,i)i=i+1 l=l+x until x~=255 end for j=1,l do t[#t+1]=b(c,i)i=i+1 end if i>n then break end local f=b(c,i)+b(c,i+1)*256 i=i+2 local m=o%16+4 if m>=19 then repeat local x=b(c,i)i=i+1 m=m+x until x~=255 end local p=#t for j=1,m do t[p+j]=t[p-f+j]end end local r={}for i=1,#t,4096 do local c={}for j=i,math.min(i+4095,#t)do c[j-i+1]=string.char(t[j])end r[#r+1]=table.concat(c)end return table.concat(r)end local s="__BASE64_PAYLOAD__" loadstring(d(crypt.base64decode(s)))()'''
+LUA_DECOMPRESSOR = '''local function d(c)local t={}local i=5 local n=#c while i<=n do local b=string.byte local o=b(c,i)i=i+1 local l=math.floor(o/16)if l>=15 then repeat local x=b(c,i)i=i+1 l=l+x until x~=255 end for j=1,l do t[#t+1]=b(c,i)i=i+1 end if i>n then break end local f=b(c,i)+b(c,i+1)*256 i=i+2 local m=o%16+4 if m>=19 then repeat local x=b(c,i)i=i+1 m=m+x until x~=255 end local p=#t for j=1,m do t[p+j]=t[p-f+j]end end local r={}for i=1,#t,4096 do local c={}for j=i,math.min(i+4095,#t)do c[j-i+1]=string.char(t[j])end r[#r+1]=table.concat(c)end return table.concat(r)end local s="__BASE64_PAYLOAD__" return loadstring(d(crypt.base64decode(s)))()'''
 
 T_COMMENT = "COMMENT"
 T_STRING = "STRING"
