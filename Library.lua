@@ -1083,6 +1083,18 @@ local FetchIcons, Icons = pcall(function()
                 writefile(CachePath, Content)
             end)
         end
+    else
+        task.spawn(function()
+            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
+            if writefile and makefolder and UpdateContent and UpdateContent ~= "" then
+                pcall(function()
+                    if not isfolder("Obsidian") then
+                        makefolder("Obsidian")
+                    end
+                    writefile(CachePath, UpdateContent)
+                end)
+            end
+        end)
     end
     return (loadstring(Content) :: () -> IconModule)()
 end)
