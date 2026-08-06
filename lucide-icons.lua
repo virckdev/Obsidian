@@ -8,24 +8,24 @@ if writefile and isfolder and makefolder and getcustomasset then
 	end
 
 	if not isfile("lucide-icons/version.txt") then
-		writefile("lucide-icons/version.txt", "2026-08-01T00:11:52.999045197+00:00")
+		writefile("lucide-icons/version.txt", "2026-08-01T00:11:52.999045198+00:00")
 	end
 
-	local ShouldUpdate = readfile("lucide-icons/version.txt") ~= "2026-08-01T00:11:52.999045197+00:00"
+	local ShouldUpdate = readfile("lucide-icons/version.txt") ~= "2026-08-01T00:11:52.999045198+00:00"
 
 	if ShouldUpdate then
-		writefile("lucide-icons/version.txt", "2026-08-01T00:11:52.999045197+00:00")
+		writefile("lucide-icons/version.txt", "2026-08-01T00:11:52.999045198+00:00")
 	end
 
 	for spritesheet = 1, 2 do
-		if isfile(`lucide-icons/{spritesheet}.png`) and not ShouldUpdate then
+		if isfile("lucide-icons/"..tostring(spritesheet)..".png") and not ShouldUpdate then
 			continue
 		end
 
 		writefile(
-			`lucide-icons/{spritesheet}.png`,
+			"lucide-icons/"..tostring(spritesheet)..".png",
 			game:HttpGet(
-				`https://raw.githubusercontent.com/white558/Obsidian/main/spritesheets/{spritesheet}.png`
+				"https://raw.githubusercontent.com/white558/Obsidian/main/spritesheets/"..tostring(spritesheet)..".png"
 			)
 		)
 	end
