@@ -11082,4 +11082,3 @@ Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
 getgenv().Library = Library
 return Library
 
-print("ui lib loaded")
