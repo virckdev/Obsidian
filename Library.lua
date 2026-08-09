@@ -1643,16 +1643,16 @@ function Library:MakeOutline(Frame: GuiObject, Corner: number?, ZIndex: number?)
     return Holder, Outline
 end
 
+```lua
 function Library:AddDraggableLabel(Text: string)
     local Table = {}
 
-    local Label = New("TextLabel", {
+    -- Main watermark container
+    local Container = New("Frame", {
         AutomaticSize = Enum.AutomaticSize.XY,
         BackgroundColor3 = "BackgroundColor",
         Size = UDim2.fromOffset(0, 0),
         Position = UDim2.fromOffset(6, 6),
-        Text = Text,
-        TextSize = 15,
         ZIndex = 10,
         Parent = ScreenGui,
     })
@@ -1661,57 +1661,87 @@ function Library:AddDraggableLabel(Text: string)
         Library.Corners,
         New("UICorner", {
             CornerRadius = UDim.new(0, Library.CornerRadius),
-            Parent = Label,
+            Parent = Container,
         })
     )
 
-	New("UIPadding", {
-	    PaddingBottom = UDim.new(0, 6),
-	    PaddingLeft = UDim.new(0, 34),
-	    PaddingRight = UDim.new(0, 12),
-	    PaddingTop = UDim.new(0, 6),
-	    Parent = Label,
-	})
-	
-	local Icon = New("ImageLabel", {
-	    BackgroundTransparency = 1,
-	    Size = UDim2.fromOffset(18, 18),
-	    Position = UDim2.new(0, 8, 0.5, -9),
-	    Image = "rbxassetid://114041611369235",
-	    ZIndex = 11,
-	    Parent = Label,
-	})
+    New("UIPadding", {
+        PaddingBottom = UDim.new(0, 6),
+        PaddingLeft = UDim.new(0, 8),
+        PaddingRight = UDim.new(0, 12),
+        PaddingTop = UDim.new(0, 6),
+        Parent = Container,
+    })
+
+    -- Keeps the icon and text separated
+    local Layout = New("UIListLayout", {
+        FillDirection = Enum.FillDirection.Horizontal,
+        HorizontalAlignment = Enum.HorizontalAlignment.Left,
+        VerticalAlignment = Enum.VerticalAlignment.Center,
+        Padding = UDim.new(0, 7),
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Parent = Container,
+    })
+
+    -- Icon
+    local Icon = New("ImageLabel", {
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(18, 18),
+        Image = "rbxassetid://114041611369235",
+        ImageTransparency = 0,
+        LayoutOrder = 1,
+        ZIndex = 11,
+        Parent = Container,
+    })
+
+    -- Text
+    local Label = New("TextLabel", {
+        AutomaticSize = Enum.AutomaticSize.XY,
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(0, 0),
+        Text = Text,
+        TextSize = 15,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        LayoutOrder = 2,
+        ZIndex = 11,
+        Parent = Container,
+    })
 
     table.insert(
         Library.Scales,
         New("UIScale", {
-            Parent = Label,
+            Parent = Container,
         })
     )
 
-    Library:AddOutline(Label)
+    Library:AddOutline(Container)
 
-    Library:MakeDraggable(Label, Label, true)
+    Library:MakeDraggable(Container, Container, true)
 
     Table.Label = Label
     Table.Icon = Icon
+    Table.Container = Container
 
     function Table:SetText(Text: string)
         Label.Text = Text
     end
 
     function Table:SetVisible(Visible: boolean)
-        Label.Visible = Visible
+        Container.Visible = Visible
     end
 
     function Table:SetIcon(Image)
-        Icon.Image = typeof(Image) == "number"
-            and "rbxassetid://" .. tostring(Image)
-            or tostring(Image)
+        if typeof(Image) == "number" then
+            Icon.Image = "rbxassetid://" .. tostring(Image)
+        else
+            Icon.Image = tostring(Image)
+        end
     end
 
     return Table
 end
+```
+
 
 function Library:AddDraggableButton(Text: string, Func, ExcludeScaling: boolean?)
     local Table = {}
