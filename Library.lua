@@ -1078,7 +1078,7 @@ local FetchIcons, Icons = pcall(function()
     end
     
     if not Content or Content == "" or not Content:find("GetAsset") then
-        Content = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
+        Content = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua)
         if writefile and makefolder and Content and Content ~= "" then
             pcall(function()
                 if not isfolder("Obsidian") then
@@ -1089,7 +1089,7 @@ local FetchIcons, Icons = pcall(function()
         end
     else
         task.spawn(function()
-            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
+            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/virckdevObsidian/main/lucide-icons.lua")
             if writefile and makefolder and UpdateContent and UpdateContent ~= "" then
                 pcall(function()
                     if not isfolder("Obsidian") then
