@@ -1656,45 +1656,31 @@ function Library:AddDraggableLabel(Text: string)
         ZIndex = 10,
         Parent = ScreenGui,
     })
-
     table.insert(
-        Library.Corners,
+        Library.Corners, 
         New("UICorner", {
             CornerRadius = UDim.new(0, Library.CornerRadius),
             Parent = Label,
         })
     )
-
     New("UIPadding", {
         PaddingBottom = UDim.new(0, 6),
-        PaddingLeft = UDim.new(0, 32),
+        PaddingLeft = UDim.new(0, 12),
         PaddingRight = UDim.new(0, 12),
         PaddingTop = UDim.new(0, 6),
         Parent = Label,
     })
-
-    local Icon = New("ImageLabel", {
-        BackgroundTransparency = 1,
-        Size = UDim2.fromOffset(18, 18),
-        Position = UDim2.new(0, 8, 0.5, -9),
-        Image = "rbxassetid://114041611369235",
-        ZIndex = 11,
-        Parent = Label,
-    })
-
     table.insert(
         Library.Scales,
         New("UIScale", {
             Parent = Label,
         })
     )
-
     Library:AddOutline(Label)
 
     Library:MakeDraggable(Label, Label, true)
 
     Table.Label = Label
-    Table.Icon = Icon
 
     function Table:SetText(Text: string)
         Label.Text = Text
@@ -1702,12 +1688,6 @@ function Library:AddDraggableLabel(Text: string)
 
     function Table:SetVisible(Visible: boolean)
         Label.Visible = Visible
-    end
-
-    function Table:SetIcon(Image)
-        Icon.Image = typeof(Image) == "number"
-            and "rbxassetid://" .. tostring(Image)
-            or tostring(Image)
     end
 
     return Table
