@@ -1667,7 +1667,7 @@ function Library:AddDraggableLabel(Text: string)
 
     New("UIPadding", {
         PaddingBottom = UDim.new(0, 6),
-        PaddingLeft = UDim.new(0, 32),
+        PaddingLeft = UDim.new(0, 30),
         PaddingRight = UDim.new(0, 12),
         PaddingTop = UDim.new(0, 6),
         Parent = Label,
@@ -1676,7 +1676,7 @@ function Library:AddDraggableLabel(Text: string)
     local Icon = New("ImageLabel", {
         BackgroundTransparency = 1,
         Size = UDim2.fromOffset(18, 18),
-        Position = UDim2.new(0, 8, 0.5, -9),
+        Position = UDim2.new(0, 5, 0.5, -9),
         Image = "rbxassetid://114041611369235",
         ZIndex = 11,
         Parent = Label,
