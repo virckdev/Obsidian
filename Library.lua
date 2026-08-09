@@ -1643,7 +1643,6 @@ function Library:MakeOutline(Frame: GuiObject, Corner: number?, ZIndex: number?)
     return Holder, Outline
 end
 
-```lua
 function Library:AddDraggableLabel(Text: string)
     local Table = {}
 
@@ -1740,8 +1739,6 @@ function Library:AddDraggableLabel(Text: string)
 
     return Table
 end
-```
-
 
 function Library:AddDraggableButton(Text: string, Func, ExcludeScaling: boolean?)
     local Table = {}
