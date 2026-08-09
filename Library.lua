@@ -1078,7 +1078,7 @@ local FetchIcons, Icons = pcall(function()
     end
     
     if not Content or Content == "" or not Content:find("GetAsset") then
-        Content = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua)
+        Content = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua")
         if writefile and makefolder and Content and Content ~= "" then
             pcall(function()
                 if not isfolder("Obsidian") then
@@ -1089,7 +1089,7 @@ local FetchIcons, Icons = pcall(function()
         end
     else
         task.spawn(function()
-            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/virckdevObsidian/main/lucide-icons.lua")
+            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua")
             if writefile and makefolder and UpdateContent and UpdateContent ~= "" then
                 pcall(function()
                     if not isfolder("Obsidian") then
@@ -1646,95 +1646,48 @@ end
 function Library:AddDraggableLabel(Text: string)
     local Table = {}
 
-    -- Main watermark container
-    local Container = New("Frame", {
+    local Label = New("TextLabel", {
         AutomaticSize = Enum.AutomaticSize.XY,
         BackgroundColor3 = "BackgroundColor",
         Size = UDim2.fromOffset(0, 0),
         Position = UDim2.fromOffset(6, 6),
+        Text = Text,
+        TextSize = 15,
         ZIndex = 10,
         Parent = ScreenGui,
     })
-
     table.insert(
-        Library.Corners,
+        Library.Corners, 
         New("UICorner", {
             CornerRadius = UDim.new(0, Library.CornerRadius),
-            Parent = Container,
+            Parent = Label,
         })
     )
-
     New("UIPadding", {
         PaddingBottom = UDim.new(0, 6),
-        PaddingLeft = UDim.new(0, 8),
+        PaddingLeft = UDim.new(0, 12),
         PaddingRight = UDim.new(0, 12),
         PaddingTop = UDim.new(0, 6),
-        Parent = Container,
+        Parent = Label,
     })
-
-    -- Keeps the icon and text separated
-    local Layout = New("UIListLayout", {
-        FillDirection = Enum.FillDirection.Horizontal,
-        HorizontalAlignment = Enum.HorizontalAlignment.Left,
-        VerticalAlignment = Enum.VerticalAlignment.Center,
-        Padding = UDim.new(0, 7),
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        Parent = Container,
-    })
-
-    -- Icon
-    local Icon = New("ImageLabel", {
-        BackgroundTransparency = 1,
-        Size = UDim2.fromOffset(18, 18),
-        Image = "rbxassetid://114041611369235",
-        ImageTransparency = 0,
-        LayoutOrder = 1,
-        ZIndex = 11,
-        Parent = Container,
-    })
-
-    -- Text
-    local Label = New("TextLabel", {
-        AutomaticSize = Enum.AutomaticSize.XY,
-        BackgroundTransparency = 1,
-        Size = UDim2.fromOffset(0, 0),
-        Text = Text,
-        TextSize = 15,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        LayoutOrder = 2,
-        ZIndex = 11,
-        Parent = Container,
-    })
-
     table.insert(
         Library.Scales,
         New("UIScale", {
-            Parent = Container,
+            Parent = Label,
         })
     )
+    Library:AddOutline(Label)
 
-    Library:AddOutline(Container)
-
-    Library:MakeDraggable(Container, Container, true)
+    Library:MakeDraggable(Label, Label, true)
 
     Table.Label = Label
-    Table.Icon = Icon
-    Table.Container = Container
 
     function Table:SetText(Text: string)
         Label.Text = Text
     end
 
     function Table:SetVisible(Visible: boolean)
-        Container.Visible = Visible
-    end
-
-    function Table:SetIcon(Image)
-        if typeof(Image) == "number" then
-            Icon.Image = "rbxassetid://" .. tostring(Image)
-        else
-            Icon.Image = tostring(Image)
-        end
+        Label.Visible = Visible
     end
 
     return Table
@@ -11108,4 +11061,3 @@ Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
 
 getgenv().Library = Library
 return Library
-
