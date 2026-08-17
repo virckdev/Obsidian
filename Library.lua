@@ -7907,13 +7907,13 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
-        function Tab:RefreshSides()
-            local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
-            for _, Side in Tab.Sides do
-                Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
-                Side.Size = UDim2.new(0.5, -3, 1, -Offset)
-            end
-        end
+		function Tab:RefreshSides()
+		    local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
+		    for _, Side in Tab.Sides do
+		        Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
+		        Side.Size = UDim2.new(0.5, -3, 1, -Offset - 20)
+		    end
+		end
 
         function Tab:Resize(ResizeWarningBox: boolean?)
             if ResizeWarningBox then
