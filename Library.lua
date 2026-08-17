@@ -7316,7 +7316,7 @@ function Library:CreateWindow(WindowInfo)
 		        return Library:GetBetterColor(Library.Scheme.BackgroundColor, 4)
 		    end,
 		    Position = UDim2.fromScale(0, 1),
-		    Size = UDim2.new(1, 0, 0, 20 + WindowInfo.CornerRadius),
+		    Size = UDim2.new(1, 0, 0, 20),
 		    ZIndex = 99,
 		    Parent = MainFrame
 		})
