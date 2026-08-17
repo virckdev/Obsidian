@@ -7911,7 +7911,7 @@ function Library:CreateWindow(WindowInfo)
 		    local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
 		    for _, Side in Tab.Sides do
 		        Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
-		        Side.Size = UDim2.new(0.5, -3, 1, -Offset - 20)
+		        Side.Size = UDim2.new(0.5, -3, 1, -Offset - 22)
 		    end
 		end
 
