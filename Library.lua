@@ -7673,13 +7673,13 @@ function Library:CreateWindow(WindowInfo)
                 Padding = UDim.new(0, 2),
                 Parent = TabLeft,
             })
-            New("UIPadding", {
-                PaddingBottom = UDim.new(0, 2),
-                PaddingLeft = UDim.new(0, 2),
-                PaddingRight = UDim.new(0, 2),
-                PaddingTop = UDim.new(0, 2),
-                Parent = TabLeft,
-            })
+			New("UIPadding", {
+			    PaddingBottom = UDim.new(0, 24),
+			    PaddingLeft = UDim.new(0, 2),
+			    PaddingRight = UDim.new(0, 2),
+			    PaddingTop = UDim.new(0, 2),
+			    Parent = TabLeft,
+			})
             do
                 New("Frame", {
                     BackgroundTransparency = 1,
@@ -7708,13 +7708,13 @@ function Library:CreateWindow(WindowInfo)
                 Padding = UDim.new(0, 2),
                 Parent = TabRight,
             })
-            New("UIPadding", {
-                PaddingBottom = UDim.new(0, 2),
-                PaddingLeft = UDim.new(0, 2),
-                PaddingRight = UDim.new(0, 2),
-                PaddingTop = UDim.new(0, 2),
-                Parent = TabRight,
-            })
+			New("UIPadding", {
+			    PaddingBottom = UDim.new(0, 24),
+			    PaddingLeft = UDim.new(0, 2),
+			    PaddingRight = UDim.new(0, 2),
+			    PaddingTop = UDim.new(0, 2),
+			    Parent = TabRight,
+			})
             do
                 New("Frame", {
                     BackgroundTransparency = 1,
