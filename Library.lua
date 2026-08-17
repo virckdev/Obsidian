@@ -7310,15 +7310,16 @@ function Library:CreateWindow(WindowInfo)
         end
 
         --// Bottom Bar \\--
-        BottomBackground = New("Frame", {
-            AnchorPoint = Vector2.new(0, 1),
-            BackgroundColor3 = function()
-                return Library:GetBetterColor(Library.Scheme.BackgroundColor, 4)
-            end,
-            Position = UDim2.fromScale(0, 1),
-            Size = UDim2.new(1, 0, 0, 20 + WindowInfo.CornerRadius),
-            Parent = MainFrame
-        })
+		BottomBackground = New("Frame", {
+		    AnchorPoint = Vector2.new(0, 1),
+		    BackgroundColor3 = function()
+		        return Library:GetBetterColor(Library.Scheme.BackgroundColor, 4)
+		    end,
+		    Position = UDim2.fromScale(0, 1),
+		    Size = UDim2.new(1, 0, 0, 20 + WindowInfo.CornerRadius),
+		    ZIndex = 99,
+		    Parent = MainFrame
+		})
         Library:MakeLine(MainFrame, {
             AnchorPoint = Vector2.new(0, 1),
             Position = UDim2.new(0, 0, 1, -20),
@@ -7330,6 +7331,7 @@ function Library:CreateWindow(WindowInfo)
             BackgroundTransparency = 1,
             Position = UDim2.fromScale(0, 1),
             Size = UDim2.new(1, 0, 0, 20),
+			ZIndex = 100,
             Parent = MainFrame,
         })
         table.insert(
