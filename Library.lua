@@ -28,7 +28,7 @@ local Toggles = {}
 local Options = {}
 local Tooltips = {}
 
-local BaseURL = "https://raw.githubusercontent.com/virckdev/Obsidian/refs/heads/main/"
+local BaseURL = "https://raw.githubusercontent.com/white558/Obsidian/refs/heads/main/"
 local CustomImageManager = {}
 local CustomImageManagerAssets = {
     TransparencyTexture = {
@@ -1078,7 +1078,7 @@ local FetchIcons, Icons = pcall(function()
     end
     
     if not Content or Content == "" or not Content:find("GetAsset") then
-        Content = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua")
+        Content = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
         if writefile and makefolder and Content and Content ~= "" then
             pcall(function()
                 if not isfolder("Obsidian") then
@@ -1089,7 +1089,7 @@ local FetchIcons, Icons = pcall(function()
         end
     else
         task.spawn(function()
-            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/virckdev/Obsidian/main/lucide-icons.lua")
+            local UpdateContent = game:HttpGet("https://raw.githubusercontent.com/white558/Obsidian/main/lucide-icons.lua")
             if writefile and makefolder and UpdateContent and UpdateContent ~= "" then
                 pcall(function()
                     if not isfolder("Obsidian") then
@@ -7666,20 +7666,20 @@ function Library:CreateWindow(WindowInfo)
                 CanvasSize = UDim2.fromScale(0, 0),
                 ScrollBarImageTransparency = 1,
                 ScrollBarThickness = 0,
-                Size = UDim2.new(0.5, -3, 1, -22),
+                Size = UDim2.new(0.5, -3, 1, 0),
                 Parent = TabContainer,
             })
             New("UIListLayout", {
                 Padding = UDim.new(0, 2),
                 Parent = TabLeft,
             })
-			New("UIPadding", {
-			    PaddingBottom = UDim.new(0, 24),
-			    PaddingLeft = UDim.new(0, 2),
-			    PaddingRight = UDim.new(0, 2),
-			    PaddingTop = UDim.new(0, 2),
-			    Parent = TabLeft,
-			})
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 2),
+                PaddingLeft = UDim.new(0, 2),
+                PaddingRight = UDim.new(0, 2),
+                PaddingTop = UDim.new(0, 2),
+                Parent = TabLeft,
+            })
             do
                 New("Frame", {
                     BackgroundTransparency = 1,
@@ -7701,20 +7701,20 @@ function Library:CreateWindow(WindowInfo)
                 Position = UDim2.fromScale(1, 0),
                 ScrollBarImageTransparency = 1,
                 ScrollBarThickness = 0,
-                Size = UDim2.new(0.5, -3, 1, -22),
+                Size = UDim2.new(0.5, -3, 1, 0),
                 Parent = TabContainer,
             })
             New("UIListLayout", {
                 Padding = UDim.new(0, 2),
                 Parent = TabRight,
             })
-			New("UIPadding", {
-			    PaddingBottom = UDim.new(0, 24),
-			    PaddingLeft = UDim.new(0, 2),
-			    PaddingRight = UDim.new(0, 2),
-			    PaddingTop = UDim.new(0, 2),
-			    Parent = TabRight,
-			})
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 2),
+                PaddingLeft = UDim.new(0, 2),
+                PaddingRight = UDim.new(0, 2),
+                PaddingTop = UDim.new(0, 2),
+                Parent = TabRight,
+            })
             do
                 New("Frame", {
                     BackgroundTransparency = 1,
@@ -7907,13 +7907,13 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
-		function Tab:RefreshSides()
-		    local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
-		    for _, Side in Tab.Sides do
-		        Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
-		        Side.Size = UDim2.new(0.5, -3, 1, -Offset - 22)
-		    end
-		end
+        function Tab:RefreshSides()
+            local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
+            for _, Side in Tab.Sides do
+                Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
+                Side.Size = UDim2.new(0.5, -3, 1, -Offset)
+            end
+        end
 
         function Tab:Resize(ResizeWarningBox: boolean?)
             if ResizeWarningBox then
